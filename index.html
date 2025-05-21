@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Support Request Form</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+  <!-- <link rel="stylesheet" href="css/login.css" /> -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .form-container {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 30px;
+      border-radius: 8px;
+      width: 400px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      color: #ff5722;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    h2 span {
+      color: #333;
+      font-weight: normal;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    select,
+    input,
+    textarea {
+      margin-top: 5px;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .login-info {
+      font-size: 14px;
+      margin-top: 15px;
+      color: #333;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #ff5722;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e64a19;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Hello <span>How can I help you?</span></h2>
+    <form id="supportForm">
+      <label for="requestType">Type of Request</label>
+      <select id="requestType" required>
+        <option value="">-Select-</option>
+        <option value="technical">Technical</option>
+        <option value="billing">Billing</option>
+        <option value="general">General</option>
+      </select>
+
+      <label for="subject">Subject</label>
+      <input type="text" id="subject" placeholder="Enter subject" required />
+
+      <label for="priority">Priority</label>
+      <select id="priority" required>
+        <option value="">-Select-</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+
+      <label for="status">Status</label>
+      <select id="status" required>
+        <option value="open" selected>Open</option>
+        <option value="closed">Closed</option>
+        <option value="in_progress">In Progress</option>
+      </select>
+
+      <label for="details">Issue Details</label>
+      <textarea id="details" rows="4" placeholder="Describe your issue..."></textarea>
+
+      <p class="login-info">You are logged in as <strong><!-- Email Here --></strong></p>
+
+      <button type="submit" id="submit">Submit</button>
+    </form>
+  </div>
+
+<script>
+  $('#submit').click(function(e) {
+    e.preventDefault();
+
+    let formData = {
+      data: [
+        {
+          Request_Type: $('#requestType').val(),
+          Subject_field: $('#subject').val(),
+          Priority: $('#priority').val(),
+          Status: $('#status').val(),
+          Description: $('#details').val()
+        }
+      ]
+    };
+
+    console.log("Form data submitted:", formData);
+
+    fetch("https://www.zohoapis.com/creator/v2.1/data/support2327/support-desk-application/form/Ticket_form", {
+      method: "POST",
+      headers: {
+        "Authorization": "1000.c638312850b23313eaa4ff86b3b38f3d.8402989f4f63717ea0cae887b5b222a2",  // Replace with your valid access token
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(res => res.json())
+    .then(response => {
+      alert("Ticket created successfully!");
+      console.log(response);
+    })
+    .catch(error => {
+      alert("Error: " + error.message);
+      console.error("Fetch error:", error);
+    });
+  });
+</script>
+
+</body>
+</html>
