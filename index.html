@@ -92,13 +92,13 @@
   <div class="form-container">
     <h2>Hello <span>How can I help you?</span></h2>
     <form id="supportForm">
-      <label for="requestType">Type of Request</label>
+      <!-- <label for="requestType">Type of Request</label>
       <select id="requestType" required>
         <option value="">-Select-</option>
         <option value="technical">Technical</option>
         <option value="billing">Billing</option>
         <option value="general">General</option>
-      </select>
+      </select> -->
 
       <label for="subject">Subject</label>
       <input type="text" id="subject" placeholder="Enter subject" required />
@@ -128,39 +128,38 @@
   </div>
 
 <script>
-  $('#submit').click(function(e) {
+  $('#supportForm').submit(function (e) {
     e.preventDefault();
 
-    let formData = {
-      data: [
-        {
-          Request_Type: $('#requestType').val(),
-          Subject_field: $('#subject').val(),
-          Priority: $('#priority').val(),
-          Status: $('#status').val(),
-          Description: $('#details').val()
-        }
-      ]
+    const inputData = {
+      data: {
+        Request_Type: "NA",
+        Subject_field: $('#subject').val(),
+        Priority: $('#priority').val(),
+        Status: $('#status').val(),
+        Description: $('#details').val()
+      }
     };
 
-    console.log("Form data submitted:", formData);
-
-    fetch("https://www.zohoapis.com/creator/v2.1/data/support2327/support-desk-application/form/Ticket_form", {
+    fetch("http://localhost:3001/submit-ticket", {
       method: "POST",
       headers: {
-        "Authorization": "1000.c638312850b23313eaa4ff86b3b38f3d.8402989f4f63717ea0cae887b5b222a2",  // Replace with your valid access token
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(inputData)  
     })
-    .then(res => res.json())
-    .then(response => {
-      alert("Ticket created successfully!");
-      console.log(response);
+    .then(res => {
+      if (!res.ok) throw new Error("Network response was not ok");
+      return res.json();
     })
-    .catch(error => {
-      alert("Error: " + error.message);
-      console.error("Fetch error:", error);
+    .then(data => {
+      console.log("Success:", data);
+      alert("Ticket submitted successfully!");
+      $('#supportForm')[0].reset();
+    })
+    .catch(err => {
+      console.error("Error:", err);
+      alert("Something went wrong. Check console for details.");
     });
   });
 </script>
